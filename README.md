@@ -1,2 +1,2 @@
-# panaderia-seminario-front
+# Panaderia Seminario Front
 panaderia-seminario-front

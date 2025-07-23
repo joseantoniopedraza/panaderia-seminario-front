@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { CartItem } from '@/types';
 import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
 
@@ -20,13 +21,58 @@ function CartComponent({
   onRemoveItem,
   onCheckout 
 }: CartProps) {
+  const [isAnimating, setIsAnimating] = useState(false);
   const total = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
-  if (!isOpen) return null;
+  // Manejar animación de cierre
+  const handleClose = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      onClose();
+      setIsAnimating(false);
+    }, 300);
+  };
+
+  // Prevenir scroll del body cuando el drawer está abierto y cerrar con Escape
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          handleClose();
+        }
+      };
+      
+      document.addEventListener('keydown', handleEscape);
+      
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+      };
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!isOpen && !isAnimating) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-      <div className="bg-white w-full max-w-md h-full overflow-y-auto shadow-xl">
+    <div 
+      className={`fixed inset-0 drawer-overlay z-50 flex justify-end transition-opacity duration-300 ${
+        isOpen && !isAnimating ? 'opacity-100' : 'opacity-0'
+      }`}
+      onClick={handleClose}
+    >
+      <div 
+        className={`bg-white w-full max-w-md h-full overflow-y-auto shadow-2xl transform transition-transform duration-300 ease-out ${
+          isOpen && !isAnimating ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
@@ -34,7 +80,7 @@ function CartComponent({
             Carrito
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <X size={20} />

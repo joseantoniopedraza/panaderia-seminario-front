@@ -5,7 +5,7 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -25,4 +25,10 @@ body {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   line-clamp: 3;
+}
+
+/* Drawer overlay with subtle backdrop */
+.drawer-overlay {
+  background-color: rgba(15, 23, 42, 0.4); /* slate-900 con 40% opacidad */
+  backdrop-filter: blur(2px);
 }

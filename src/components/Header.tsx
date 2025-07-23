@@ -9,7 +9,7 @@ interface HeaderProps {
 
 function HeaderComponent({ cartItemCount, onOpenCart }: HeaderProps) {
   return (
-    <header className="bg-amber-50 border-b border-amber-100 sticky top-0 z-40">
+    <header className="bg-amber-50 border-b border-amber-100 sticky top-0 z-40 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}

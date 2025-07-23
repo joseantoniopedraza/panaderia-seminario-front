@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 import Cart from '@/components/Cart';
 import OrderList from '@/components/OrderList';
+import Footer from '@/components/Footer';
 
 // Datos mock mientras conectamos con el backend
 const mockProducts: ProductModel[] = [
@@ -155,6 +156,9 @@ export default function Home() {
           </section>
         )}
       </main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Cart */}
       <Cart

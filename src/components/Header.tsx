@@ -21,19 +21,6 @@ function HeaderComponent({ cartItemCount, onOpenCart }: HeaderProps) {
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <a href="#productos" className="text-amber-700 hover:text-amber-900 font-medium">
-              Productos
-            </a>
-            <a href="#pedidos" className="text-amber-700 hover:text-amber-900 font-medium">
-              Pedidos
-            </a>
-            <a href="#contacto" className="text-amber-700 hover:text-amber-900 font-medium">
-              Contacto
-            </a>
-          </nav>
-
           {/* Cart Button */}
           <button
             onClick={onOpenCart}

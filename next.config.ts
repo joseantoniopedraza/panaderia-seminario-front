@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'standalone',
+  experimental: {
+    // Optimizaciones para Docker
+    optimizePackageImports: ['lucide-react'],
+  },
+  // Configuración para producción
+  poweredByHeader: false,
+  compress: true,
 };
 
 export default nextConfig;

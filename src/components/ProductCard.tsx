@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { ProductModel } from '@/types';
 import { ShoppingCart, Plus } from 'lucide-react';
 
@@ -9,21 +10,23 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      {/* Imagen del producto */}
-      <div className="h-48 bg-gradient-to-br from-amber-100 to-orange-200 overflow-hidden">
-        <img 
-          src={product.photo} 
-          alt={product.name}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // Fallback al emoji si la imagen no carga
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-            target.parentElement!.innerHTML = '<span class="text-4xl flex items-center justify-center h-full">🥖</span>';
-          }}
-        />
+      {/* Imagen del producto con fallback */}
+      <div className="h-48 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center overflow-hidden">
+        {imageError ? (
+          <span className="text-4xl">🥖</span>
+        ) : (
+          <img 
+            src={product.photo} 
+            alt={product.name}
+            className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
+            onLoad={() => setImageError(false)}
+          />
+        )}
       </div>
       
       <div className="p-4">

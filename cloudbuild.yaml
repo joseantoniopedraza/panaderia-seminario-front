@@ -1,0 +1,46 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/panaderia-seminario-front:$COMMIT_SHA', '.']
+  
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/panaderia-seminario-front:$COMMIT_SHA']
+  
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'panaderia-seminario-front'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/panaderia-seminario-front:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '3000'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--min-instances'
+      - '0'
+
+# Store images in Google Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/panaderia-seminario-front:$COMMIT_SHA'
+
+# Configure substitutions
+substitutions:
+  _SERVICE_NAME: 'panaderia-seminario-front'
+  _REGION: 'us-central1'
+
+# Options
+options:
+  logging: CLOUD_LOGGING_ONLY

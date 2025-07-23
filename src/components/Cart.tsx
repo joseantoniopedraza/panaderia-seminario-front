@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CartItem } from '@/types';
-import { ShoppingCart, X, Plus, Minus } from 'lucide-react';
+import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 
 interface CartProps {
   items: CartItem[];
@@ -102,9 +102,10 @@ function CartComponent({
                     <h3 className="font-medium text-gray-800">{item.product.name}</h3>
                     <button
                       onClick={() => onRemoveItem(item.product.id)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded transition-colors"
+                      title="Eliminar producto"
                     >
-                      <X size={16} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                   

@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🥖 Panadería Delicias - Frontend
 
-## Getting Started
+Una aplicación web moderna para la gestión de pedidos de una panadería, desarrollada con Next.js 15 y TailwindCSS.
 
-First, run the development server:
+## ✨ Características
+
+- **🛒 Carrito de Compras**: Agregar productos, modificar cantidades y realizar pedidos
+- **📱 Responsive Design**: Optimizado para móviles, tablets y escritorio
+- **🎨 UI Moderna**: Diseñado con TailwindCSS y iconos de Lucide
+- **⚡ Next.js 15**: Con Turbopack para desarrollo ultrarrápido
+- **🔧 TypeScript**: Tipado estricto para mejor mantenimiento
+- **🐳 Docker Ready**: Configuración completa para containerización
+
+## 🚀 Quick Start
+
+### Desarrollo
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Ejecutar en modo desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Abrir http://localhost:3000 en tu navegador
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Producción
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Build de producción
+npm run build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Ejecutar servidor de producción
+npm run start
 
-## Learn More
+# O usar Docker
+./deploy.sh
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Scripts Disponibles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` - Servidor de desarrollo con Turbopack
+- `npm run build` - Build de producción
+- `npm run start` - Servidor de producción
+- `npm run lint` - Linting con ESLint
+- `./deploy.sh` - Script de deployment con Docker
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🏗️ Estructura del Proyecto
 
-## Deploy on Vercel
+```
+src/
+├── app/                    # App Router de Next.js
+│   ├── globals.css        # Estilos globales
+│   ├── layout.tsx         # Layout principal
+│   └── page.tsx          # Página principal
+├── components/            # Componentes React
+│   ├── Cart.tsx          # Carrito de compras
+│   ├── Header.tsx        # Header/Navegación
+│   ├── OrderList.tsx     # Lista de pedidos
+│   └── ProductCard.tsx   # Card de producto
+├── hooks/                # Custom hooks
+│   └── useCart.ts        # Hook para manejo del carrito
+└── types/                # Definiciones TypeScript
+    └── index.ts          # Tipos de datos
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔧 Tecnologías
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Estilos**: TailwindCSS 4
+- **Iconos**: Lucide React
+- **Container**: Docker
+- **Herramientas**: ESLint, PostCSS
+
+## 🌐 API Integration
+
+El proyecto está preparado para conectar con el backend. Los tipos están definidos en `/src/types/`:
+
+```typescript
+// Contratos con el backend
+export interface ProductModel {
+  id: number;
+  name: string;
+  price: number;
+  descripcion: string;
+}
+
+export interface OrderModel {
+  id: number;
+  client: string;
+  total: number;
+  date: string;
+}
+```
+
+## 🐳 Docker
+
+El proyecto incluye un Dockerfile optimizado para producción:
+
+```bash
+# Build de la imagen
+docker build -t panaderia-delicias .
+
+# Ejecutar contenedor
+docker run -p 3000:3000 panaderia-delicias
+```
+
+## 🎯 Próximos Pasos
+
+1. **Conectar con Backend**: Implementar llamadas reales a la API
+2. **Base de Datos**: Persistencia de pedidos y productos
+3. **Autenticación**: Sistema de login para administradores
+4. **Notificaciones**: Alertas de pedidos nuevos
+5. **Imágenes**: Upload y display de fotos de productos
+
+## 🤝 Contribución
+
+1. Fork del proyecto
+2. Crear rama feature (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir Pull Request
+
+## 📝 Licencia
+
+Este proyecto está bajo la licencia MIT.
+
+---
+
+*Desarrollado con ❤️ para Panadería Delicias*

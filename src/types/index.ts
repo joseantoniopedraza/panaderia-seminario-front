@@ -9,8 +9,8 @@ export interface ProductModel {
   id: number;
   name: string;
   price: number;
-  descripcion: string;
-  photo: string;
+  description: string; // Cambiado de 'descripcion' para coincidir con la API
+  photo?: string; // Opcional ya que la API no lo incluye aún
 }
 
 // Tipos adicionales que probablemente necesitaremos

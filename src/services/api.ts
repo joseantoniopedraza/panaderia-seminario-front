@@ -1,5 +1,5 @@
 // Configuración de la API
-const API_BASE_URL = 'https://panaderia-ia-79353642738.us-central1.run.app';
+const API_BASE_URL = '/api'; // Usar proxy local en lugar de URL externa
 
 // Tipos para las respuestas de la API
 export interface ApiResponse<T> {

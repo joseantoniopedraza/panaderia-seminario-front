@@ -16,7 +16,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       {/* Imagen del producto con fallback */}
       <div className="h-48 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center overflow-hidden">
-        {imageError ? (
+        {!product.photo || imageError ? (
           <span className="text-4xl">🥖</span>
         ) : (
           <img 
@@ -35,7 +35,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         </h3>
         
         <p className="text-gray-600 text-sm mb-3 line-clamp-3">
-          {product.descripcion}
+          {product.description}
         </p>
         
         <div className="flex items-center justify-between">

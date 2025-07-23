@@ -14,37 +14,43 @@ const mockProducts: ProductModel[] = [
     id: 1,
     name: "Pan Francés",
     price: 2.50,
-    descripcion: "Pan crujiente por fuera, suave por dentro. Perfecto para el desayuno o para acompañar cualquier comida."
+    descripcion: "Pan crujiente por fuera, suave por dentro. Perfecto para el desayuno o para acompañar cualquier comida.",
+    photo: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=300&fit=crop"
   },
   {
     id: 2,
     name: "Croissant de Mantequilla",
     price: 3.75,
-    descripcion: "Croissant hojaldrado con mantequilla francesa. Dorado y delicioso, ideal para el desayuno."
+    descripcion: "Croissant hojaldrado con mantequilla francesa. Dorado y delicioso, ideal para el desayuno.",
+    photo: "https://images.unsplash.com/photo-1555507036-ab794f27d1ea?w=400&h=300&fit=crop"
   },
   {
     id: 3,
     name: "Empanadas de Pollo",
     price: 4.25,
-    descripcion: "Empanadas caseras rellenas de pollo desmenuzado con especias y verduras. Horneadas hasta quedar doradas."
+    descripcion: "Empanadas caseras rellenas de pollo desmenuzado con especias y verduras. Horneadas hasta quedar doradas.",
+    photo: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop"
   },
   {
     id: 4,
     name: "Torta Tres Leches",
     price: 18.99,
-    descripcion: "Deliciosa torta esponjosa bañada en tres tipos de leche. Un postre tradicional irresistible."
+    descripcion: "Deliciosa torta esponjosa bañada en tres tipos de leche. Un postre tradicional irresistible.",
+    photo: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&h=300&fit=crop"
   },
   {
     id: 5,
     name: "Pan Integral",
     price: 3.00,
-    descripcion: "Pan integral con semillas, rico en fibra y nutrientes. Perfecto para una alimentación saludable."
+    descripcion: "Pan integral con semillas, rico en fibra y nutrientes. Perfecto para una alimentación saludable.",
+    photo: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=300&fit=crop"
   },
   {
     id: 6,
     name: "Galletas de Chocolate",
     price: 8.50,
-    descripcion: "Galletas caseras con chips de chocolate belga. Crujientes por fuera, suaves por dentro."
+    descripcion: "Galletas caseras con chips de chocolate belga. Crujientes por fuera, suaves por dentro.",
+    photo: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop"
   }
 ];
 

@@ -10,6 +10,7 @@ export interface ProductModel {
   name: string;
   price: number;
   descripcion: string;
+  photo: string;
 }
 
 // Tipos adicionales que probablemente necesitaremos

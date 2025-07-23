@@ -2,58 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { ProductModel, OrderModel, CartItem } from '@/types';
+import { ProductService, OrderService, handleApiError } from '@/services/api';
 import { useCart } from '@/hooks/useCart';
 import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 import Cart from '@/components/Cart';
 import OrderList from '@/components/OrderList';
 import Footer from '@/components/Footer';
-
-// Datos mock mientras conectamos con el backend
-const mockProducts: ProductModel[] = [
-  {
-    id: 1,
-    name: "Pan Francés",
-    price: 2.50,
-    descripcion: "Pan crujiente por fuera, suave por dentro. Perfecto para el desayuno o para acompañar cualquier comida.",
-    photo: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=300&fit=crop"
-  },
-  {
-    id: 2,
-    name: "Croissant de Mantequilla",
-    price: 3.75,
-    descripcion: "Croissant hojaldrado con mantequilla francesa. Dorado y delicioso, ideal para el desayuno.",
-    photo: "https://images.unsplash.com/photo-1555507036-ab794f27d1ea?w=400&h=300&fit=crop"
-  },
-  {
-    id: 3,
-    name: "Empanadas de Pollo",
-    price: 4.25,
-    descripcion: "Empanadas caseras rellenas de pollo desmenuzado con especias y verduras. Horneadas hasta quedar doradas.",
-    photo: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop"
-  },
-  {
-    id: 4,
-    name: "Torta Tres Leches",
-    price: 18.99,
-    descripcion: "Deliciosa torta esponjosa bañada en tres tipos de leche. Un postre tradicional irresistible.",
-    photo: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&h=300&fit=crop"
-  },
-  {
-    id: 5,
-    name: "Pan Integral",
-    price: 3.00,
-    descripcion: "Pan integral con semillas, rico en fibra y nutrientes. Perfecto para una alimentación saludable.",
-    photo: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=300&fit=crop"
-  },
-  {
-    id: 6,
-    name: "Galletas de Chocolate",
-    price: 8.50,
-    descripcion: "Galletas caseras con chips de chocolate belga. Crujientes por fuera, suaves por dentro.",
-    photo: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop"
-  }
-];
 
 export default function Home() {
   const {
@@ -69,24 +24,71 @@ export default function Home() {
     closeCart,
   } = useCart();
 
+  const [products, setProducts] = useState<ProductModel[]>([]);
   const [orders, setOrders] = useState<OrderModel[]>([]);
   const [activeTab, setActiveTab] = useState<'productos' | 'pedidos'>('productos');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleCheckout = async (clientName: string) => {
-    // Simular llamada al backend
-    const newOrder: OrderModel = {
-      id: orders.length + 1,
-      client: clientName,
-      total: total,
-      date: new Date().toISOString()
+  // Cargar productos desde la API
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const productsData = await ProductService.getAll();
+        setProducts(productsData);
+        setError(null);
+      } catch (err) {
+        setError(handleApiError(err));
+        console.error('Error loading products:', err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setOrders(prev => [newOrder, ...prev]);
-    clearCart();
-    closeCart();
-    
-    // Mostrar mensaje de éxito (podrías usar una librería de notificaciones)
-    alert(`¡Pedido realizado exitosamente! Número de pedido: ${newOrder.id}`);
+    loadProducts();
+  }, []);
+
+  // Cargar órdenes desde la API
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const ordersData = await OrderService.getAll();
+        setOrders(ordersData);
+      } catch (err) {
+        console.error('Error loading orders:', err);
+      }
+    };
+
+    loadOrders();
+  }, []);
+
+  const handleCheckout = async (clientName: string) => {
+    try {
+      // Transformar items del carrito al formato esperado por la API
+      const orderItems = items.map(item => ({
+        product_id: item.product.id,
+        quantity: item.quantity
+      }));
+
+      // Crear orden en la API
+      const newOrder = await OrderService.create({
+        client: clientName,
+        items: orderItems
+      });
+
+      // Actualizar lista de órdenes
+      setOrders(prev => [newOrder, ...prev]);
+      clearCart();
+      closeCart();
+      
+      // Mostrar mensaje de éxito
+      alert(`¡Pedido realizado exitosamente! Número de pedido: ${newOrder.id}`);
+    } catch (err) {
+      const errorMessage = handleApiError(err);
+      alert(`Error al crear el pedido: ${errorMessage}`);
+      console.error('Error creating order:', err);
+    }
   };
 
   return (
@@ -137,15 +139,55 @@ export default function Home() {
         {activeTab === 'productos' && (
           <section>
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Nuestros Productos</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mockProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAddToCart={addToCart}
-                />
-              ))}
-            </div>
+            
+            {/* Loading state */}
+            {loading && (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+                <span className="ml-3 text-amber-700">Cargando productos...</span>
+              </div>
+            )}
+            
+            {/* Error state */}
+            {error && !loading && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div className="flex">
+                  <div className="text-red-400">⚠️</div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">Error al cargar productos</h3>
+                    <p className="text-sm text-red-700 mt-1">{error}</p>
+                    <button 
+                      onClick={() => window.location.reload()}
+                      className="text-sm text-red-600 underline mt-2"
+                    >
+                      Intentar de nuevo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Products grid */}
+            {!loading && !error && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onAddToCart={addToCart}
+                  />
+                ))}
+              </div>
+            )}
+            
+            {/* Empty state */}
+            {!loading && !error && products.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🥖</div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No hay productos disponibles</h3>
+                <p className="text-gray-500">Los productos se están preparando en el horno...</p>
+              </div>
+            )}
           </section>
         )}
 

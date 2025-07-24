@@ -96,10 +96,8 @@ export class OrderService {
                 id: Date.now(), // ID único basado en timestamp
                 client: orderData.client,
                 total: orderData.total,
-                products: orderData.products,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                status: 'pending' // Estado simulado
+                date: new Date().toISOString(), // Formato ISO como el backend real
+                products: orderData.products
               };
               
               console.log('Simulated order created:', simulatedOrder);
@@ -126,10 +124,8 @@ export class OrderService {
           id: Date.now(),
           client: orderData.client,
           total: orderData.total,
-          products: orderData.products,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          status: 'pending'
+          date: new Date().toISOString(), // Formato ISO como el backend real
+          products: orderData.products
         };
         
         console.log('Simulated order created due to network error:', simulatedOrder);

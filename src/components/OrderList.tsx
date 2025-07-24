@@ -8,6 +8,46 @@ interface OrderListProps {
 }
 
 export default function OrderList({ orders }: OrderListProps) {
+  const formatOrderDate = (dateString: string) => {
+    // Intentar parsear la fecha - maneja tanto ISO como formato texto
+    const date = new Date(dateString);
+    
+    // Si la fecha es válida, formatearla
+    if (!isNaN(date.getTime())) {
+      // Si es una fecha ISO con hora 00:00:00, tratarla como fecha pura sin conversión de zona horaria
+      if (dateString.includes('T00:00:00')) {
+        return date.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: 'UTC' // Evitar conversión de zona horaria
+        });
+      }
+      
+      // Para otras fechas (como las que crea el POST), mostrar tal como vienen
+      if (!dateString.includes('T')) {
+        // Es formato texto como "Thu Jul 24 2025", parsearlo y formatear
+        return date.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+      
+      // Para fechas ISO con hora real, mostrar fecha y hora
+      return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
+    // Si no se puede parsear, devolver el string original
+    return dateString;
+  };
+
   if (orders.length === 0) {
     return (
       <div className="text-center py-12">
@@ -42,13 +82,7 @@ export default function OrderList({ orders }: OrderListProps) {
           
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Calendar size={16} />
-            <span>{new Date(order.date).toLocaleDateString('es-ES', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}</span>
+            <span>{formatOrderDate(order.date)}</span>
           </div>
         </div>
       ))}

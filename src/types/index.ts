@@ -2,7 +2,16 @@ export interface OrderModel {
   id: number;
   client: string;
   total: number;
-  date: string;
+  date: string; // ISO string format "2025-07-24T00:00:00.000Z"
+  products: Array<{
+    quantity: number;
+    product: {
+      id: number;
+      name: string;
+      price: number;
+      description: string;
+    };
+  }>;
 }
 
 export interface ProductModel {

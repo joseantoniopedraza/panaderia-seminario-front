@@ -66,15 +66,18 @@ export default function Home() {
   const handleCheckout = async (clientName: string) => {
     try {
       // Transformar items del carrito al formato esperado por la API
-      const orderItems = items.map(item => ({
-        product_id: item.product.id,
+      const orderProducts = items.map(item => ({
+        product: {
+          id: item.product.id
+        },
         quantity: item.quantity
       }));
 
-      // Crear orden en la API
+      // Crear orden en la API con el formato correcto
       const newOrder = await OrderService.create({
         client: clientName,
-        items: orderItems
+        total: total,
+        products: orderProducts
       });
 
       // Actualizar lista de órdenes

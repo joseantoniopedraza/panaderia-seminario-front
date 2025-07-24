@@ -45,7 +45,9 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    const response = await fetch(`${API_BASE_URL}/orders`, {
+    console.log('Sending order to backend:', JSON.stringify(body, null, 2));
+    
+    const response = await fetch(`${API_BASE_URL}/order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,11 +55,16 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     });
 
+    console.log('Backend response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Backend error response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
     }
 
     const data = await response.json();
+    console.log('Backend response data:', data);
 
     return NextResponse.json(data, {
       status: 201,
@@ -69,8 +76,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error proxying orders POST request:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to create order' },
+      { error: 'Failed to create order', details: errorMessage },
       { 
         status: 500,
         headers: {
